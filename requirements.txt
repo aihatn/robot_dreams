@@ -1,0 +1,10 @@
+colorama
+seaborn==0.13.2
+pandas==3.0.1
+requests==2.32.5
+types-requests
+flask==3.1.*
+Flask-BasicAuth==0.2.0
+pymodbus[serial]==3.12.*
+paho-mqtt==2.1.*
+dash==4.0.*
