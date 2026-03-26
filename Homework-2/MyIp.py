@@ -20,8 +20,13 @@ def get_location(ip: str):
         if response.status_code == 200:
             json_data = response.json()
             print(f"Location data for IP {ip}: {json_data}")
-            data = json_data["lat"], json_data["lon"]
-            return data
+
+            return (
+                json_data["lat"],
+                json_data["lon"],
+                json_data.get("city"),
+                json_data.get("country")
+            )
         else:
             print(f"Error: HTTP {response.status_code}")
             return None
