@@ -5,4 +5,4 @@ SLOT = 1
 # ====== PLC_1 NASTAVENÍ DB ======
 DB_NUMBER = 2
 START_OFFSET = 0
-SIZE = 2
+SIZE = 9

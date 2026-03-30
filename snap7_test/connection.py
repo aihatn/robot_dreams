@@ -1,5 +1,18 @@
 import time, snap7, CONST
-from snap7.util import get_int
+from dataclasses import dataclass
+from snap7.util import get_int, get_bool
+
+
+@dataclass
+class PLCData:
+    value1: int
+    value2: int
+    value3: int
+    value4: int
+    button1: bool
+    button2: bool
+    button3: bool
+    button4: bool
 
 
 def connection():
@@ -15,13 +28,35 @@ def connection():
         raise Exception("Nepodařilo se připojit k PLC.")
 
 
+def read_plc_data(client):
+
+    data = client.db_read(CONST.DB_NUMBER, 0, CONST.SIZE)
+
+    plc_data = PLCData(
+        value1=get_int(data, 0),
+        value2=get_int(data, 2),
+        value3=get_int(data, 4),
+        value4=get_int(data, 6),
+        button1=get_bool(data, 8, 0),
+        button2=get_bool(data, 8, 1),
+        button3=get_bool(data, 8, 2),
+        button4=get_bool(data, 8, 3),
+    )
+
+    return plc_data
+
+
 def database_read(client):
-    print(f"Čtení DB{CONST.DB_NUMBER}.DBW{CONST.START_OFFSET} každou sekundu. Ukončení pomocí CTRL+C.")
+    print("Čtení struktury z PLC... CTRL+C pro ukončení")
 
     while True:
-        data = client.db_read(CONST.DB_NUMBER, CONST.START_OFFSET, CONST.SIZE)
-        value = get_int(data, 0)
-        print(f"Hodnota INT v DB{CONST.DB_NUMBER}.DBW{CONST.START_OFFSET}: {value}")
+        plc = read_plc_data(client)
+
+        print(
+            f"INT: {plc.value1}, {plc.value2}, {plc.value3}, {plc.value4} | "
+            f"BTN: {plc.button1}, {plc.button2}, {plc.button3}, {plc.button4}"
+        )
+
         time.sleep(1)
 
 
